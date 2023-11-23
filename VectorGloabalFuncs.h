@@ -5,46 +5,45 @@
 namespace gm
 {
 
-#define STD_MATH_FUNC(func)											\
-	template<int L, typename T>										\
-	inline Vec<L, T> func##(Vec<L, T> const& v)   					\
-	{																\
-		Vec<L, T> y;												\
-		for (int i = 0; i < L; ++i) 								\
-			y[i] = std::##func##(v[i]);								\
-		return y;													\
-	}																\
+#define MATH_UN_FUNC(name, func, Cond)									\
+	template<int L, typename T, Cond<T> = true>							\
+	inline constexpr Vec<L, T> name##(Vec<L, T> const& v) noexcept {	\
+		Vec<L, T> y;													\
+		for (int i = 0; i < L; ++i) 									\
+			y[i] = func##(v[i]);										\
+		return y;														\
+	}																	\
 
-#define STD_MATH_BIN_FUNC(func)												\
-	template<int L, typename T>												\
-	inline Vec<L, T> func##(Vec<L, T>const& a, Vec<L, T>const& b)   		\
+#define MATH_BIN_FUNC(name, func, Cond)										\
+	template<int L, typename T, Cond<T> = true>								\
+	inline constexpr Vec<L, T> name##(Vec<L, T>const& a, Vec<L, T>const& b) noexcept   		\
 	{																		\
 		Vec<L, T> y;														\
 		for (int i = 0; i < L; ++i)  										\
-			y[i] = std::##func##(a[i], b[i]);								\
+			y[i] = func##(a[i], b[i]);										\
 		return y;															\
 	}																		\
-	template<int L, typename T>												\
-	inline Vec<L, T> func##(Vec<L, T>const& a, T const& b)   				\
+	template<int L, typename T, Cond<T> = true>								\
+	inline constexpr Vec<L, T> name##(Vec<L, T>const& a, T const& b) noexcept   \
 	{																		\
 		Vec<L, T> y;														\
 		for (int i = 0; i < L; ++i)  										\
-			y[i] = std::##func##(a[i], b);									\
+			y[i] = func##(a[i], b);											\
 		return y;															\
 	}																		\
-	template<int L, typename T>												\
-	inline Vec<L, T> func##(T const& a, Vec<L, T>const& b)   				\
+	template<int L, typename T, Cond<T> = true>								\
+	inline constexpr Vec<L, T> name##(T const& a, Vec<L, T>const& b) noexcept  	\
 	{																		\
 		Vec<L, T> y;														\
 		for (int i = 0; i < L; ++i)  										\
-			y[i] = std::##func##(a, b[i]);									\
+			y[i] = func##(a, b[i]);											\
 		return y;															\
 	}																		\
 
 
 #define MATH_TRIN_FUNC(name, func)															\
 	template<int L, typename T>																\
-	inline Vec<L, T> name##(const Vec<L, T>& a, const Vec<L, T>& b, const Vec<L, T>& c)   	\
+	inline constexpr Vec<L, T> name##(const Vec<L, T>& a, const Vec<L, T>& b, const Vec<L, T>& c) noexcept  \
 	{																						\
 		Vec<L, T> y;																		\
 		for (int i = 0; i < L; ++i)  														\
@@ -52,7 +51,7 @@ namespace gm
 		return y;																			\
 	}																						\
 	template<int L, typename T>																\
-	inline Vec<L, T> name##(const Vec<L, T>& a, const Vec<L, T>& b, const T& c)   			\
+	inline constexpr Vec<L, T> name##(const Vec<L, T>& a, const Vec<L, T>& b, const T& c) noexcept  \
 	{																						\
 		Vec<L, T> y;																		\
 		for (int i = 0; i < L; ++i)   														\
@@ -60,7 +59,7 @@ namespace gm
 		return y;																			\
 	}																						\
 	template<int L, typename T>																\
-	inline Vec<L, T> name##(const Vec<L, T>& a, const T& b, const Vec<L, T>& c)   			\
+	inline constexpr Vec<L, T> name##(const Vec<L, T>& a, const T& b, const Vec<L, T>& c) noexcept  \
 	{																						\
 		Vec<L, T> y;																		\
 		for (int i = 0; i < L; ++i)   														\
@@ -68,7 +67,7 @@ namespace gm
 		return y;																			\
 	}																						\
 	template<int L, typename T>																\
-	inline Vec<L, T> name##(const Vec<L, T>& a, const T& b, const T& c)   					\
+	inline constexpr Vec<L, T> name##(const Vec<L, T>& a, const T& b, const T& c) noexcept  \
 	{																						\
 		Vec<L, T> y;																		\
 		for (int i = 0; i < L; ++i)  														\
@@ -76,7 +75,7 @@ namespace gm
 		return y;																			\
 	}																						\
 	template<int L, typename T>																\
-	inline Vec<L, T> name##(const T& a, const Vec<L, T>& b, const Vec<L, T>& c)   			\
+	inline constexpr Vec<L, T> name##(const T& a, const Vec<L, T>& b, const Vec<L, T>& c) noexcept  \
 	{																						\
 		Vec<L, T> y;																		\
 		for (int i = 0; i < L; ++i)   														\
@@ -84,7 +83,7 @@ namespace gm
 		return y;																			\
 	}																						\
 	template<int L, typename T>																\
-	inline Vec<L, T> name##(const T& a, const Vec<L, T>& b, const T& c)   					\
+	inline constexpr Vec<L, T> name##(const T& a, const Vec<L, T>& b, const T& c) noexcept  \
 	{																						\
 		Vec<L, T> y;																		\
 		for (int i = 0; i < L; ++i)   														\
@@ -92,7 +91,7 @@ namespace gm
 		return y;																			\
 	}																						\
 	template<int L, typename T>																\
-	inline Vec<L, T> name##(const T& a, const T& b, const Vec<L, T>& c)   					\
+	inline constexpr Vec<L, T> name##(const T& a, const T& b, const Vec<L, T>& c) noexcept  \
 	{																						\
 		Vec<L, T> y;																		\
 		for (int i = 0; i < L; ++i)   														\
@@ -101,33 +100,31 @@ namespace gm
 	}																						\
 
 
-	STD_MATH_FUNC(abs)
-	STD_MATH_FUNC(acos)
-	STD_MATH_FUNC(asin)
-	STD_MATH_FUNC(atan)
-	STD_MATH_FUNC(cos)
-	STD_MATH_FUNC(ceil)
-	STD_MATH_FUNC(cosh)
-	STD_MATH_FUNC(exp)
-	STD_MATH_FUNC(exp2)
-	STD_MATH_FUNC(floor)
-	STD_MATH_FUNC(log)
-	STD_MATH_FUNC(log2)
-	STD_MATH_FUNC(log10)
-	//STD_MATH_FUNC(max)
-	//STD_MATH_FUNC(min)
-	STD_MATH_FUNC(round)
-	STD_MATH_FUNC(sin)
-	STD_MATH_FUNC(sinh)
-	STD_MATH_FUNC(sqrt)
-	STD_MATH_FUNC(tan)
-	STD_MATH_FUNC(tanh)
+	MATH_UN_FUNC(abs, 	::abs,	IsAny)
+	MATH_UN_FUNC(acos, 	::acos,	IsFloat)
+	MATH_UN_FUNC(asin, 	::asin,	IsFloat)
+	MATH_UN_FUNC(atan, 	::atan,	IsFloat)
+	MATH_UN_FUNC(cos, 	::cos,	IsFloat)
+	MATH_UN_FUNC(ceil, 	::ceil,	IsFloat)
+	MATH_UN_FUNC(cosh, 	::cosh,	IsFloat)
+	MATH_UN_FUNC(exp, 	::exp,	IsFloat)
+	MATH_UN_FUNC(exp2, 	::exp2,	IsFloat)
+	MATH_UN_FUNC(floor, ::floor,IsFloat)
+	MATH_UN_FUNC(log, 	::log,	IsFloat)
+	MATH_UN_FUNC(log2, 	::log2,	IsFloat)
+	MATH_UN_FUNC(log10, ::log10,IsFloat)
+	MATH_UN_FUNC(round, ::round,IsFloat)
+	MATH_UN_FUNC(sin, 	::sin,	IsFloat)
+	MATH_UN_FUNC(sinh, 	::sinh,	IsFloat)
+	MATH_UN_FUNC(sqrt, 	::sqrt,	IsFloat)
+	MATH_UN_FUNC(tan, 	::tan,	IsFloat)
+	MATH_UN_FUNC(tanh, 	::tanh,	IsFloat)
 
-	STD_MATH_BIN_FUNC(pow)
-	STD_MATH_BIN_FUNC(atan2)
-	STD_MATH_BIN_FUNC(fmod)
-	STD_MATH_BIN_FUNC(fmin)
-	STD_MATH_BIN_FUNC(fmax)
+	MATH_BIN_FUNC(pow,	::pow,		IsFloat)
+	MATH_BIN_FUNC(atan2,::atan2,	IsFloat)
+	MATH_BIN_FUNC(mod, 	::fmod,		IsFloat)
+	MATH_BIN_FUNC(min, 	std::min,	IsAny)
+	MATH_BIN_FUNC(max, 	std::fmax,	IsAny)
 
 
 	template<typename T>
@@ -144,7 +141,7 @@ namespace gm
 	MATH_TRIN_FUNC(clamp, clamp)
 
 
-	template<int L, typename T>
+	template<int L, typename T, IsFloat<T> = true>
 	inline T dot(const Vec<L, T>& a, const Vec<L, T>& b)
 	{
 		T result = a[0] * b[0];
@@ -153,45 +150,45 @@ namespace gm
 		return result;
 	}
 
-	template<int L, typename T>
+	template<int L, typename T, IsFloat<T> = true>
 	inline T sqrLength(const Vec<L, T>& a)
 	{
 		return dot(a, a);
 	}
 
-	template<int L, typename T>
+	template<int L, typename T, IsFloat<T> = true>
 	inline T length(const Vec<L, T>& a)
 	{
 		return std::sqrt(sqrLength(a));
 	}
 
-	template<int L, typename T>
+	template<int L, typename T, IsFloat<T> = true>
 	inline T sqrDistance(const Vec<L, T>& a, const Vec<L, T>& b)
 	{
 		return sqrLength(a - b);
 	}
 
-	template<int L, typename T>
+	template<int L, typename T, IsFloat<T> = true>
 	inline T distance(const Vec<L, T>& a, const Vec<L, T>& b)
 	{
 		return std::sqrt(sqrDistance(a, b));
 	}
 
-	template<int L, typename T>
+	template<int L, typename T, IsFloat<T> = true>
 	inline Vec<L, T> normalize(const Vec<L, T>& a)
 	{
 		T invLength = (T)1 / length(a);
 		return a * invLength;
 	}
 
-	template<int L, typename T>
+	template<int L, typename T, IsFloat<T> = true>
 	inline T angle(const Vec<L, T>& from, const Vec<L, T>& to)
 	{
 		const T cosTheta = dot(from, to) / std::sqrt(sqrLength(from) * sqrLength(to));
 		return std::acos(std::min((T)1, cosTheta));
 	}
 
-	template<typename T>
+	template<typename T, IsFloat<T> = true>
 	inline Vec<3, T> cross(const Vec<3, T>& a, const Vec<3, T>& b) 
 	{
 		return Vec<3, T> 
