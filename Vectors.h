@@ -128,12 +128,12 @@ namespace gm
 			y.values[i] = this->values[i] op other;									\
 		return y;																	\
 	}																				\
-	inline constexpr Vec<L, T>& operator op##= (const Vec<L, T>& other) const {		\
+	inline constexpr Vec<L, T>& operator op##= (const Vec<L, T>& other) {			\
 		for (int i = 0; i < L; ++i)													\
 			this->values[i] op##= other.values[i];									\
 		return *this;																\
 	}																				\
-	inline constexpr Vec<L, T>& operator op##= (const T& other) const {				\
+	inline constexpr Vec<L, T>& operator op##= (const T& other) {					\
 		for (int i = 0; i < L; ++i)													\
 			this->values[i] op##= other;											\
 		return *this;																\
